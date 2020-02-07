@@ -12,13 +12,15 @@ def dain_update():
     bsObj = BeautifulSoup(result.read(),"html.parser")
     txta = bsObj.find_all("td",attrs={"class":"tc"})
     result = dict()
-    daylist = ['월','화','수','목','금']
-    for i in range(0,4):        
+    daylist = ['코너','판매시간','월','화','수','목','금']
+    for i in range(0,6):        
         result[daylist[i]] = dict()
 
-    for i in range(0,len(txta)):        
+    for i in range(0,len(txta)-2):        
         # print("[",i+1,"]",txta[i].get_text())
-        print(txta[i].string)
+        if txta[i].string = 'None':
+            result[daylist[0]]
+            
     
     #txt = str(bsObj) 
 

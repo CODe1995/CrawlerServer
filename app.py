@@ -18,6 +18,14 @@ def cs():
     response.headers['Content-Type'] = 'application/json;charset=UTF-8'
     return response
 
+#컴공 공지사항 출력
+@app.route('/get-boannews')
+def boannews():       
+    response = make_response(render_template('get-boannews.json'))
+    response.headers['Content-Type'] = 'application/json;charset=UTF-8'
+    return response
+
+#=====================================업데이트부분
 #인제대 학식 다인 출력
 @app.route('/dain-update')
 def inje_meal_dain():    
