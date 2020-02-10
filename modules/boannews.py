@@ -1,11 +1,11 @@
+# 보안뉴스 RSS 최신뉴스 크롤링해서 json에 저장하는 모듈
+
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import urllib.parse
 import json
 import feedparser
 from modules import shortURL,writejson
-
-
 
 def boannews_update():    
     print('boannews 업데이트') 

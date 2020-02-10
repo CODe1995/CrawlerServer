@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, make_response
+from flask import Flask, render_template, jsonify, make_response,request
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import urllib.parse
@@ -18,9 +18,9 @@ def cs():
     response.headers['Content-Type'] = 'application/json;charset=UTF-8'
     return response
 
-#컴공 공지사항 출력
+#보안뉴스 출력
 @app.route('/get-boannews')
-def boannews():       
+def boannews_print():       
     response = make_response(render_template('get-boannews.json'))
     response.headers['Content-Type'] = 'application/json;charset=UTF-8'
     return response
@@ -47,6 +47,22 @@ def boanupdate():
     boannews.boannews_update()
     print('보안뉴스 업데이트 완료')
     return render_template('index.html')
+
+@app.route('/api/test',methods=['GET','POST'])
+def api_test():
+    dataSend = {
+            "version": "2.0",
+            "template": {
+                "outputs": [
+                    {
+                        "simpleText":{
+                            "text" : "testtttt"
+                        }
+                    }
+                ]
+            }
+        }
+    return jsonify(dataSend)
 
 #JSON 파일 읽어오기
 def readjson(route):

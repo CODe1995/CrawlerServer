@@ -1,3 +1,4 @@
+# 인제대컴공 공지사항 크롤링해서 json에 업데이트하는 모듈
 from flask import Flask, render_template, jsonify, make_response
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
