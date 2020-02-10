@@ -56,7 +56,7 @@ def api_test():
                 "outputs": [
                     {
                         "simpleText":{
-                            "text" : "testtttt"
+                            "text" : "testttttt"
                         }
                     }
                 ]
