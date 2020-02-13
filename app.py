@@ -5,13 +5,11 @@ import urllib.parse
 import ssl
 import re
 import json
-from modules import csnotice, boannews
-
+from modules import csnotice, boannews, Scapture
+import os
 app = Flask(__name__)
 
 #JSON 파일 읽어오기
-
-
 def readjson(Froute):
     try:
         with open(Froute, 'r', encoding='utf-8') as json_file:
@@ -20,7 +18,6 @@ def readjson(Froute):
         print(ex)
         return ''
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -28,27 +25,24 @@ def index():
 #컴공 공지사항 출력
 @app.route('/get-cs')
 def cs():
-    response = make_response(render_template('get-cs.json'))
-    response.headers['Content-Type'] = 'application/json;charset=UTF-8'
-    return response
+    data = readjson('./templates/get-cs.json')
+    return json.dumps(data,ensure_ascii=False)
 
 #보안뉴스 출력
 @app.route('/get-boannews')
-def boannews_print():
-    response = make_response(render_template('get-boannews.json'))
-    response.headers['Content-Type'] = 'application/json;charset=UTF-8'
-    return response
+def boannews_print():    
+    data = readjson('./templates/get-boannews.json')
+    return json.dumps(data,ensure_ascii=False)
 
 #=====================================업데이트부분=============================
-#인제대 학식 다인 출력
+#인제대 학식 다인 사진 캡처
 @app.route('/dain-update')
 def inje_meal_dain():
-
-    print('다인 조회')
-    return render_template('index.html')
+    link = 'https://www.inje.ac.kr/kor/Template/Bsub_page.asp?Ltype=5&Ltype2=3&Ltype3=3&Tname=S_Food&Ldir=board/S_Food&Lpage=s_food_view&d1n=5&d2n=4&d3n=4&d4n=0'
+    Scapture.func_capture(link,'id','table1',0,'다인메뉴.png')
+    return jsonify(result='done')
 
 #컴공학사 공지를 가져와서 get-cs.json에 업데이트 시킨다.
-#게시글 제목과 링크만
 @app.route('/cs-update')
 def csupdate():
     csnotice.cs_update()
@@ -62,7 +56,7 @@ def boanupdate():
     print('보안뉴스 업데이트 완료')
     return render_template('index.html')
 
-#=====================================json처리 부분=============================
+#=====================================API 반환 부분=============================
 @app.route('/kakao/api/notice_cs', methods=['GET', 'POST'])
 def api_notice_cs():
     dataSend = readjson('templates/get-cs.json')
@@ -101,6 +95,15 @@ def api_boannews():
     dataSend = readjson('templates/get-boannews.json')
     return jsonify(dataSend)
 
+@app.route('/kakao/api/dain',methods=['GET','POST'])
+def kakaodain():
+    return '다인메뉴.png'
+
+@app.route('/kakao/api/hayeongwan',methods=['GET','POST'])
+def kakaohayeongwan():
+    return '하연관메뉴.png'
+
+#=====================================메인함수=============================
 if __name__ == "__main__":
     keylist = readjson('keylist.json')
     app.run(host=keylist["ip"], port=keylist["port"])
