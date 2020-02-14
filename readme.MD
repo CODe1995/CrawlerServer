@@ -9,3 +9,6 @@ jsonify로 Json 형태로 출력
 
 #### /*
 각종 update 함수
+
+20.02.14
+html에 img 학식 width 100%로 띄우기 완료

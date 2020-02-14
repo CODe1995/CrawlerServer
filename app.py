@@ -18,9 +18,9 @@ def readjson(Froute):
         print(ex)
         return ''
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
 
 #컴공 공지사항 출력
 @app.route('/get-cs')
@@ -39,7 +39,7 @@ def boannews_print():
 @app.route('/dain-update')
 def inje_meal_dain():
     link = 'https://www.inje.ac.kr/kor/Template/Bsub_page.asp?Ltype=5&Ltype2=3&Ltype3=3&Tname=S_Food&Ldir=board/S_Food&Lpage=s_food_view&d1n=5&d2n=4&d3n=4&d4n=0'
-    Scapture.func_capture(link,'id','table1',0,'다인메뉴.png')
+    Scapture.func_capture(link,'id','table1',0,os.getcwd()+'/show/다인메뉴.png')    
     return jsonify(result='done')
 
 #컴공학사 공지를 가져와서 get-cs.json에 업데이트 시킨다.
@@ -47,14 +47,14 @@ def inje_meal_dain():
 def csupdate():
     csnotice.cs_update()
     print('CS 공지사항 업데이트 완료')
-    return render_template('index.html')
+    return jsonify(result='done')
 
 #보안뉴스 업데이트 함수
 @app.route('/boannews-update')
 def boanupdate():
     boannews.boannews_update()
     print('보안뉴스 업데이트 완료')
-    return render_template('index.html')
+    return jsonify(result='done')
 
 #=====================================API 반환 부분=============================
 @app.route('/kakao/api/notice_cs', methods=['GET', 'POST'])
@@ -95,9 +95,9 @@ def api_boannews():
     dataSend = readjson('templates/get-boannews.json')
     return jsonify(dataSend)
 
-@app.route('/kakao/api/dain',methods=['GET','POST'])
+@app.route('/kakao/api/dain')#메뉴판 사진 띄워줌
 def kakaodain():
-    return '다인메뉴.png'
+    return render_template('imgshow.html')
 
 @app.route('/kakao/api/hayeongwan',methods=['GET','POST'])
 def kakaohayeongwan():
