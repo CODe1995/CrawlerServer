@@ -10,6 +10,8 @@ import os
 app = Flask(__name__)
 
 #JSON 파일 읽어오기
+
+
 def readjson(Froute):
     try:
         with open(Froute, 'r', encoding='utf-8') as json_file:
@@ -26,20 +28,21 @@ def readjson(Froute):
 @app.route('/get-cs')
 def cs():
     data = readjson('./templates/get-cs.json')
-    return json.dumps(data,ensure_ascii=False)
+    return json.dumps(data, ensure_ascii=False)
 
 #보안뉴스 출력
 @app.route('/get-boannews')
-def boannews_print():    
+def boannews_print():
     data = readjson('./templates/get-boannews.json')
-    return json.dumps(data,ensure_ascii=False)
+    return json.dumps(data, ensure_ascii=False)
 
 #=====================================업데이트부분=============================
 #인제대 학식 다인 사진 캡처
 @app.route('/dain-update')
 def inje_meal_dain():
     link = 'https://www.inje.ac.kr/kor/Template/Bsub_page.asp?Ltype=5&Ltype2=3&Ltype3=3&Tname=S_Food&Ldir=board/S_Food&Lpage=s_food_view&d1n=5&d2n=4&d3n=4&d4n=0'
-    Scapture.func_capture(link,'id','table1',0,os.getcwd()+'/show/다인메뉴.png')    
+    Scapture.func_capture(link, 'id', 'table1', 0,
+                          os.getcwd()+'/show/다인메뉴.png')
     return jsonify(result='done')
 
 #컴공학사 공지를 가져와서 get-cs.json에 업데이트 시킨다.
@@ -64,12 +67,12 @@ def api_notice_cs():
     jlist["items"] = list()
     for i in range(5):
         jlist['items'].append({
-            'title': dataSend[str(i+1)]['title'],            
-            'link':{
-                'web':dataSend[str(i+1)]['link']
+            'title': dataSend[str(i+1)]['title'],
+            'link': {
+                'web': dataSend[str(i+1)]['link']
             }
-            })
-    
+        })
+
     manuData = {
         "version": "2.0",
         "template": {
@@ -80,7 +83,7 @@ def api_notice_cs():
                             "title": "컴퓨터공학부 공지사항",
                             "imageUrl": "https://cs.inje.ac.kr/wp-content/uploads/2019/07/가로1_한영_컬러_저용량.jpg"
                         },
-                        'items':jlist['items']
+                        'items': jlist['items']
                     }
                 }
             ]
@@ -95,13 +98,71 @@ def api_boannews():
     dataSend = readjson('templates/get-boannews.json')
     return jsonify(dataSend)
 
-@app.route('/kakao/api/dain')#메뉴판 사진 띄워줌
-def kakaodain():
-    return render_template('imgshow.html')
 
-@app.route('/kakao/api/hayeongwan',methods=['GET','POST'])
+@app.route('/kakao/api/dain', methods=['GET', 'POST'])  # 메뉴판 사진 띄워줌
+def kakaodain():
+    keylist = readjson('keylist.json')
+    dainurl = "http://"+keylist["ip"]+":" + keylist["port"]+"/static/images/다인메뉴.png"
+    print(dainurl)
+    Data = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "carousel": {
+                        "type": "basicCard",
+                        "items": [
+                            {
+                                "title": "늘빛관 다인",
+                                "description": "보물상자 안에는 뭐가 있을까",
+                                "thumbnail": {
+                                    "imageUrl": dainurl
+                                },
+                                "buttons": [
+                                    {
+                                        "action": "message",
+                                        "label": "오늘의 메뉴!?",
+                                        "messageText": "오늘의 메뉴 출력"
+                                    },
+                                    {
+                                        "action":  "webLink",
+                                        "label": "학식표 구경하기",
+                                        "webLinkUrl": dainurl
+                                    }
+                                ]
+                            },
+                            {
+                                "title": "하연관 식당",
+                                "description": "보물상자2 안에는 뭐가 있을까",
+                                "thumbnail": {
+                                    "imageUrl": "http://k.kakaocdn.net/dn/83BvP/bl20duRC1Q1/lj3JUcmrzC53YIjNDkqbWK/i_6piz1p.jpg"
+                                },
+                                "buttons": [
+                                    {
+                                        "action": "message",
+                                        "label": "열어보기",
+                                        "messageText": "짜잔! 우리가 찾던 보물입니다"
+                                    },
+                                    {
+                                        "action":  "webLink",
+                                        "label": "구경하기",
+                                        "webLinkUrl": "https://e.kakao.com/t/hello-ryan"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+    return jsonify(Data)
+
+
+@app.route('/kakao/api/hayeongwan', methods=['GET', 'POST'])
 def kakaohayeongwan():
     return '하연관메뉴.png'
+
 
 #=====================================메인함수=============================
 if __name__ == "__main__":
