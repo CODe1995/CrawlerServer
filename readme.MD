@@ -1,3 +1,13 @@
+Python 3.8.0
+Flask 1.1.1
+Werkzeung 0.16.1
+urllib
+json
+bs4
+jsonify
+selenium
+PIL
+
 ### json response 구현하기
 
 #### /kakao/api/*
