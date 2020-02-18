@@ -102,7 +102,8 @@ def api_boannews():
 @app.route('/kakao/api/dain', methods=['GET', 'POST'])  # 메뉴판 사진 띄워줌
 def kakaodain():
     keylist = readjson('keylist.json')
-    dainurl = "http://"+keylist["ip"]+":" + keylist["port"]+"/static/images/다인메뉴.png"
+    dainurl = "http://"+keylist["ip"]+":" + \
+        keylist["port"]+"/static/images/다인메뉴.png"
     print(dainurl)
     Data = {
         "version": "2.0",
@@ -162,6 +163,35 @@ def kakaodain():
 @app.route('/kakao/api/hayeongwan', methods=['GET', 'POST'])
 def kakaohayeongwan():
     return '하연관메뉴.png'
+
+
+@app.route('/kakao/api/break',methods=['GET','POST'])
+def quick_break():
+    data = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": "휴학 관련 문의는 이런게 있어!"
+                    }
+                }
+            ],
+            "quickReplies": [
+                {
+                    "messageText": "휴학에 대해서 설명해줘!",
+                    "action": "message",
+                    "label": "휴학설명"
+                },
+                {
+                    "messageText": "휴학 방법 알려줘!",
+                    "action": "message",
+                    "label": "휴학방법"
+                }
+            ]
+        }
+    }
+    return jsonify(data)
 
 
 #=====================================메인함수=============================
