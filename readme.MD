@@ -27,8 +27,11 @@ PIL
 jsonify로 Json 형태로 출력
 (단톡용 챗봇 전용) - 가공은 알아서
 
-20.02.14
-html에 img 학식 width 100%로 띄우기 완료
+20.02.26
+apicontrol 기능 추가 및 keylist.json으로 url 처리
 
 20.02.19
 Quick_break 함수 추가
+
+20.02.14
+html에 img 학식 width 100%로 띄우기 완료
