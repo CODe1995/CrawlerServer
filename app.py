@@ -5,7 +5,7 @@ import urllib.parse
 import ssl
 import re
 import json
-from modules import csnotice, boannews, Scapture
+from modules import csnotice, boannews, Scapture, apicontrol
 import os
 app = Flask(__name__)
 
@@ -72,7 +72,6 @@ def api_notice_cs():
                 'web': dataSend[str(i+1)]['link']
             }
         })
-
     manuData = {
         "version": "2.0",
         "template": {
@@ -166,33 +165,32 @@ def kakaohayeongwan():
 
 
 @app.route('/kakao/api/break',methods=['GET','POST'])
-def quick_break():
-    data = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "simpleText": {
-                        "text": "휴학 관련 문의는 이런게 있어!"
-                    }
-                }
-            ],
-            "quickReplies": [
-                {
-                    "messageText": "휴학에 대해서 설명해줘!",
-                    "action": "message",
-                    "label": "휴학설명"
-                },
-                {
-                    "messageText": "휴학 방법 알려줘!",
-                    "action": "message",
-                    "label": "휴학방법"
-                }
-            ]
-        }
-    }
-    return jsonify(data)
+def apibreak(): #휴학
+    return apicontrol.api_break()
 
+@app.route('/kakao/api/back',methods=['GET','POST'])
+def apiback():  #복학
+    return apicontrol.api_back()
+
+@app.route('/kakao/api/subjectapply',methods=['GET','POST'])
+def apisubjectapply(): #수강신청
+    return apicontrol.api_subjectapply()
+
+@app.route('/kakao/api/tuitionpayment',methods=['GET','POST'])
+def apituitionpayment(): #등록금 납부/납입
+    return apicontrol.api_tuitionpayment()
+
+@app.route('/kakao/api/graduation',methods=['GET','POST'])
+def apigraduation():    #졸업
+    return apicontrol.api_graduation()
+
+@app.route('/kakao/api/volunteer',methods=['GET','POST'])
+def apivolunteer():    #봉사활동
+    return apicontrol.api_volunteer()
+
+@app.route('/kakao/api/absent',methods=['GET','POST'])
+def apiabsent():        #공인결석원
+    return apicontrol.api_absent()
 
 #=====================================메인함수=============================
 if __name__ == "__main__":
