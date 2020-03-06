@@ -48,6 +48,14 @@ def api_break():            #휴학
                                 "link": {
                                     "web": key['break'][2]
                                 }
+                            },
+                            {
+                                "title": "휴학에 따른 등록금 대체",
+                                "description": "휴학에따라 등록금 처리 안내",
+                                "imageUrl": "",
+                                "link": {
+                                    "web": key['break'][3]
+                                }
                             }
                         ]
                     }

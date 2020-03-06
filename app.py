@@ -7,11 +7,22 @@ import re
 import json
 from modules import csnotice, boannews, Scapture, apicontrol
 import os
+#쓰레드
+import time
+import threading
 app = Flask(__name__)
 
+def thread_run():
+    print('=====',time.ctime(),'=====')
+    csnotice.cs_update()
+    threading.Timer(600,thread_run).start()
+
+# def update_set():
+#     inje_meal_dain()
+#     csupdate()
+#     boanupdate()
+
 #JSON 파일 읽어오기
-
-
 def readjson(Froute):
     try:
         with open(Froute, 'r', encoding='utf-8') as json_file:
@@ -194,5 +205,8 @@ def apiabsent():        #공인결석원
 
 #=====================================메인함수=============================
 if __name__ == "__main__":
-    keylist = readjson('keylist.json')
+    keylist = readjson('keylist.json')    
+    thread_run()
     app.run(host=keylist["ip"], port=keylist["port"])
+    
+
