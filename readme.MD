@@ -8,6 +8,7 @@ jsonify
 selenium
 PIL
 
+### urllib을 사용하는 함수에 try except 구현해두기
 ### json response 구현하기
 ### 캐로셀 응답 수정 요망.
 ### API부분 app.py에서 파일 분할 필요

@@ -14,8 +14,11 @@ app = Flask(__name__)
 
 def thread_run():
     print('=====',time.ctime(),'=====')
-    csnotice.cs_update()
-    threading.Timer(600,thread_run).start()
+    csnotice.cs_update()    #학사 공지 업데이트
+    boannews.boannews_update()    #보안뉴스 최신 업데이트
+    link = 'https://www.inje.ac.kr/kor/Template/Bsub_page.asp?Ltype=5&Ltype2=3&Ltype3=3&Tname=S_Food&Ldir=board/S_Food&Lpage=s_food_view&d1n=5&d2n=4&d3n=4&d4n=0'
+    Scapture.func_capture(link, 'id', 'table1', 0, os.getcwd()+'/static/images/다인메뉴.png')    #학식 업데이트
+    threading.Timer(3600,thread_run).start()
 
 # def update_set():
 #     inje_meal_dain()
@@ -66,8 +69,7 @@ def csupdate():
 #보안뉴스 업데이트 함수
 @app.route('/boannews-update')
 def boanupdate():
-    boannews.boannews_update()
-    print('보안뉴스 업데이트 완료')
+    boannews.boannews_update()    
     return jsonify(result='done')
 
 #=====================================API 반환 부분=============================
@@ -108,72 +110,13 @@ def api_boannews():
     dataSend = readjson('templates/get-boannews.json')
     return jsonify(dataSend)
 
-
-@app.route('/kakao/api/dain', methods=['GET', 'POST'])  # 메뉴판 사진 띄워줌
-def kakaodain():
-    keylist = readjson('keylist.json')
-    dainurl = "http://"+keylist["ip"]+":" + \
-        keylist["port"]+"/static/images/다인메뉴.png"
-    print(dainurl)
-    Data = {
-        "version": "2.0",
-        "template": {
-            "outputs": [
-                {
-                    "carousel": {
-                        "type": "basicCard",
-                        "items": [
-                            {
-                                "title": "늘빛관 다인",
-                                "description": "보물상자 안에는 뭐가 있을까",
-                                "thumbnail": {
-                                    "imageUrl": dainurl
-                                },
-                                "buttons": [
-                                    {
-                                        "action": "message",
-                                        "label": "오늘의 메뉴!?",
-                                        "messageText": "오늘의 메뉴 출력"
-                                    },
-                                    {
-                                        "action":  "webLink",
-                                        "label": "학식표 구경하기",
-                                        "webLinkUrl": dainurl
-                                    }
-                                ]
-                            },
-                            {
-                                "title": "하연관 식당",
-                                "description": "보물상자2 안에는 뭐가 있을까",
-                                "thumbnail": {
-                                    "imageUrl": "http://k.kakaocdn.net/dn/83BvP/bl20duRC1Q1/lj3JUcmrzC53YIjNDkqbWK/i_6piz1p.jpg"
-                                },
-                                "buttons": [
-                                    {
-                                        "action": "message",
-                                        "label": "열어보기",
-                                        "messageText": "짜잔! 우리가 찾던 보물입니다"
-                                    },
-                                    {
-                                        "action":  "webLink",
-                                        "label": "구경하기",
-                                        "webLinkUrl": "https://e.kakao.com/t/hello-ryan"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
-    }
-    return jsonify(Data)
-
+@app.route('/kakao/api/dain', methods=['GET', 'POST'])
+def kakaodain():    #다인메뉴판
+    return apicontrol.api_dain()
 
 @app.route('/kakao/api/hayeongwan', methods=['GET', 'POST'])
-def kakaohayeongwan():
+def kakaohayeongwan():  #하연관메뉴판 업데이트 요망!
     return '하연관메뉴.png'
-
 
 @app.route('/kakao/api/break',methods=['GET','POST'])
 def apibreak(): #휴학

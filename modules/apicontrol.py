@@ -10,8 +10,22 @@ def readjson(Froute):
         print(ex)
         return ''
 
-def api_dain():
-    return
+def api_dain(): #다인
+    dainurl = "http://"+key["ip"]+":" + key["port"]+"/static/images/다인메뉴.png"
+    data2 = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleImage": {
+                        "imageUrl": dainurl,
+                        "altText": "학식을 가져오는데 실패했습니다! 조금만 기다려주세요!"
+                    }
+                }
+            ]
+        }
+    }
+    return jsonify(data2)
 
 def api_break():            #휴학
     data = {
