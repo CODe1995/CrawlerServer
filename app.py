@@ -38,41 +38,11 @@ def readjson(Froute):
 # def index():
 #     return render_template('index.html')
 
-#컴공 공지사항 출력
-@app.route('/get-cs')
-def cs():
-    data = readjson('./templates/get-cs.json')
-    return json.dumps(data, ensure_ascii=False)
-
-#보안뉴스 출력
-@app.route('/get-boannews')
-def boannews_print():
-    data = readjson('./templates/get-boannews.json')
-    return json.dumps(data, ensure_ascii=False)
-
-#=====================================업데이트부분=============================
-#인제대 학식 다인 사진 캡처
-@app.route('/dain-update')
-def inje_meal_dain():
-    link = 'https://www.inje.ac.kr/kor/Template/Bsub_page.asp?Ltype=5&Ltype2=3&Ltype3=3&Tname=S_Food&Ldir=board/S_Food&Lpage=s_food_view&d1n=5&d2n=4&d3n=4&d4n=0'
-    Scapture.func_capture(link, 'id', 'table1', 0,
-                          os.getcwd()+'/show/다인메뉴.png')
-    return jsonify(result='done')
-
-#컴공학사 공지를 가져와서 get-cs.json에 업데이트 시킨다.
-@app.route('/cs-update')
-def csupdate():
-    csnotice.cs_update()
-    print('CS 공지사항 업데이트 완료')
-    return jsonify(result='done')
-
-#보안뉴스 업데이트 함수
-@app.route('/boannews-update')
-def boanupdate():
-    boannews.boannews_update()    
-    return jsonify(result='done')
-
 #=====================================API 반환 부분=============================
+# @app.route('/kakao/api/weather',methods=['GET','POST'])
+# def api_weather():
+#     return apicontrol.api_weather(loc)
+
 @app.route('/kakao/api/notice_cs', methods=['GET', 'POST'])
 def api_notice_cs():
     dataSend = readjson('templates/get-cs.json')
@@ -103,7 +73,6 @@ def api_notice_cs():
     }
     # print(json.dumps(manuData,indent='\t'))
     return jsonify(manuData)
-
 
 @app.route('/kakao/api/boannews', methods=['GET', 'POST'])
 def api_boannews():

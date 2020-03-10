@@ -1,6 +1,9 @@
 # 카카오 오픈빌더에 JSON 형태로 보내는 함수를 정리해 놓음.
 # app.py에 나열하면 복잡해지기 때문에,,
 from flask import jsonify
+from urllib.request import urlopen, Request
+import urllib
+import bs4
 import json
 def readjson(Froute):
     try:
@@ -9,6 +12,29 @@ def readjson(Froute):
     except Exception as ex:
         print(ex)
         return ''
+
+def api_weather(loc): #날씨
+    location = loc
+    enc_location = urllib.parse.quote(location + '+날씨')
+    url = 'https://search.naver.com/search.naver?ie=utf8&query='+ enc_location
+    req = Request(url)
+    page = urlopen(req)
+    html = page.read()
+    soup = bs4.BeautifulSoup(html,'html5lib')
+    textL = '현재 ' + location + ' 날씨는 ' + soup.find('p', class_='info_temperature')
+    datas = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": textL
+                    }
+                }
+            ]
+        }
+    }
+    return jsonify(datas)
 
 def api_dain(): #다인
     dainurl = "http://"+key["ip"]+":" + key["port"]+"/static/images/다인메뉴.png"
