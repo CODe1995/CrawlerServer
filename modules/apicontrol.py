@@ -5,6 +5,7 @@ from urllib.request import urlopen, Request
 import urllib
 import bs4
 import json
+from modules import weather
 def readjson(Froute):
     try:
         with open(Froute, 'r', encoding='utf-8') as json_file:
@@ -14,21 +15,15 @@ def readjson(Froute):
         return ''
 
 def api_weather(loc): #날씨
-    location = loc
-    enc_location = urllib.parse.quote(location + '+날씨')
-    url = 'https://search.naver.com/search.naver?ie=utf8&query='+ enc_location
-    req = Request(url)
-    page = urlopen(req)
-    html = page.read()
-    soup = bs4.BeautifulSoup(html,'html5lib')
-    textL = '현재 ' + location + ' 날씨는 ' + soup.find('p', class_='info_temperature')
+    result = weather.weather_naver(loc)
+    print(result)
     datas = {
         "version": "2.0",
         "template": {
             "outputs": [
                 {
                     "simpleText": {
-                        "text": textL
+                        "text": result
                     }
                 }
             ]
