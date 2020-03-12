@@ -5,7 +5,7 @@ from urllib.request import urlopen, Request
 import urllib
 import bs4
 import json
-from modules import weather
+from modules import weather,acmicpc
 def readjson(Froute):
     try:
         with open(Froute, 'r', encoding='utf-8') as json_file:
@@ -13,6 +13,26 @@ def readjson(Froute):
     except Exception as ex:
         print(ex)
         return ''
+
+def api_acmicpc():  #acmicpc 랭킹
+    acmicpc.acmicpc_rank()
+    acmicpcjson = readjson('./templates/acmicpcrank.json')
+    #이부분 acmicpcjson을 key로 접근해야하는데 반복문으로 접근하는 방법을 구해야함
+    # for i in range(1,10):
+    #     print(acmicpcjson.index(i)) 
+    datas = {
+        "version": "2.0",
+        "template": {
+            "outputs": [
+                {
+                    "simpleText": {
+                        "text": 'result'
+                    }
+                }
+            ]
+        }
+    }
+    return jsonify(datas)
 
 def api_weather(loc): #날씨
     result = weather.weather_naver(loc)

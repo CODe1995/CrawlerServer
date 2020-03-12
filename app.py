@@ -14,16 +14,13 @@ app = Flask(__name__)
 
 def thread_run():
     print('=====',time.ctime(),'=====')
+    # bf = time.ctime()
     # csnotice.cs_update()    #학사 공지 업데이트
     # boannews.boannews_update()    #보안뉴스 최신 업데이트
     # link = 'https://www.inje.ac.kr/kor/Template/Bsub_page.asp?Ltype=5&Ltype2=3&Ltype3=3&Tname=S_Food&Ldir=board/S_Food&Lpage=s_food_view&d1n=5&d2n=4&d3n=4&d4n=0'
     # Scapture.func_capture(link, 'id', 'table1', 0, os.getcwd()+'/static/images/다인메뉴.png')    #학식 업데이트
+    # af = time.ctime()   #함수들 돌리는데 소요된 시간만큼 계산해줘야함. 안그러면 오차생김
     threading.Timer(3600,thread_run).start()
-
-# def update_set():
-#     inje_meal_dain()
-#     csupdate()
-#     boanupdate()
 
 #JSON 파일 읽어오기
 def readjson(Froute):
@@ -34,13 +31,14 @@ def readjson(Froute):
         print(ex)
         return ''
 
-# @app.route('/')
-# def index():
-#     return render_template('index.html')
+#=====================================API 반환 부분=============================#####
 
-#=====================================API 반환 부분=============================
+@app.route('/kakao/api/acmicpc',methods=['GET','POST'])
+def acmicpcrank():
+    return apicontrol.api_acmicpc()
+
 @app.route('/kakao/api/weather',methods=['GET','POST'])
-def api_weather():    #날씨 조회
+def weathernav():    #날씨 조회
     content = request.get_json()    #요청된 json    
     loc = content['action']['params']['지역명']
     return apicontrol.api_weather(loc)
